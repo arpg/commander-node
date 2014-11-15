@@ -1,0 +1,8 @@
+message CommandMsg {
+  required double Accel = 1;
+  required double Phi = 2;
+}
+
+message CommandReply {
+}
+
