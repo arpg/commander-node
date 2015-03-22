@@ -5,7 +5,7 @@
 #include <HAL/Utils/Node.h>
 
 #include "Command.pb.h"
-//#include "JoystickHandler.h"
+#include "JoystickHandler.h"
 #include <iostream>
 #include <boost/bind.hpp>
 
@@ -36,7 +36,7 @@ struct NinjaCtrlSigs
 #define DEFAULT_ACCEL_OFFSET 245.35
 #define DEFAULT_STEERING_OFFSET 255
 
-//JoystickHandler theGamepad;
+JoystickHandler theGamepad;
 
 using namespace pangolin;
 int KeyCounter = 0;
@@ -100,11 +100,11 @@ int main(int argc, char** argv)
     theIMU.RegisterIMUDataCallback(IMU_Handler);
 
     ///-------------------- INIT GAMEPAD
-//    if(theGamepad.InitializeJoystick()) {
-//        std::cout << "Successfully initialized gamepad." << std::endl;
-//    } else {
-//        std::cerr << "Failed to initialized gamepad." << std::endl;
-//    }
+    if(theGamepad.InitializeJoystick()) {
+        std::cout << "Successfully initialized gamepad." << std::endl;
+    } else {
+        std::cerr << "Failed to initialized gamepad." << std::endl;
+    }
 
     ///-------------------- INIT PANGOLIN
 
