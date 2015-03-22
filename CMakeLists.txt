@@ -27,12 +27,19 @@ include_directories( ${Boost_INCLUDE_DIRS} )
 
 add_subdirectory( Gamepad )
 set( HDRS ${PROTO_HDRS} NinjaGUI.h JoystickHandler.h)
-set( SRCS main.cpp NinjaGUI.cpp JoystickHandler.cpp ${PROTO_SRCS} )
+
+option(JOYSTICK_CONTROL "Enable in order to control ninja with joystick" ON)
+
+if(JOYSTICK_CONTROL)
+    set( SRCS JoystickHandler.cpp control-joystick.cpp ${PROTO_SRCS} )
+else()
+    set( SRCS main.cpp NinjaGUI.cpp JoystickHandler.cpp ${PROTO_SRCS} )
+endif(JOYSTICK_CONTROL)
 
 add_executable( ${PROJECT_NAME} ${HDRS} ${SRCS} )
 
-target_link_libraries( ${PROJECT_NAME} Gamepad )
 target_link_libraries( ${PROJECT_NAME}
+    Gamepad
     ${HAL_LIBRARIES}
     ${Pangolin_LIBRARIES}
     ${SceneGraph_LIBRARIES}
@@ -44,4 +51,3 @@ target_link_libraries( ${PROJECT_NAME}
     ${PROTOBUF_LIBRARIES}
     ${Boost_LIBRARIES}
     )
-#message("boost is : ${Boost_LIBRARIES}")

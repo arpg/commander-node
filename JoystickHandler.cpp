@@ -1,6 +1,6 @@
 #include "JoystickHandler.h"
 
-const bool VERBOSE = false;
+const bool VERBOSE = true;
 
 JoystickHandler::JoystickHandler()
 {
