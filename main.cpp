@@ -177,7 +177,7 @@ int main(int argc, char** argv)
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        printf("Accel: %f      Phi: %f\r",joystickAccel,joystickPhi);
+        //printf("Accel: %f      Phi: %f\r",joystickAccel,joystickPhi);
 //////////////////////
         CommandMsg Req;
         //CommandReply Rep;

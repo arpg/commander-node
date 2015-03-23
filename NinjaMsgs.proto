@@ -1,0 +1,31 @@
+message NinjaStateMsg 
+{
+    required int32   m_cDelimiter1  = 1;
+    required int32   m_cDelimiter2  = 2;
+    required int32   m_cSize        = 3;
+    required int32   Acc_x          = 4;
+    required int32   Acc_y          = 5;
+    required int32   Acc_z          = 6;
+    required int32   Gyro_x         = 7;
+    required int32   Gyro_y         = 8;
+    required int32   Gyro_z         = 9;
+    required int32   Mag_x          = 10;
+    required int32   Mag_y          = 11;
+    required int32   Mag_z          = 12;
+    required int32   Enc_LB         = 13;
+    required int32   Enc_LF         = 14;
+    required int32   Enc_RB         = 15;
+    required int32   Enc_RF         = 16;
+    required int32   ADC_Steer      = 17;
+    required int32   ADC_LB         = 18;
+    required int32   ADC_LF         = 20;
+    required int32   ADC_RB         = 21;
+    required int32   ADC_RF         = 22;
+}
+
+message NinjaCommandMsg
+{
+   required double  speed     = 1;
+   required double  turnrate  = 2;
+}
+
