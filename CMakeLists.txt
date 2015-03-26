@@ -1,4 +1,4 @@
-project(ninja-gui)
+project(commander_node)
 cmake_minimum_required(VERSION 2.8)
 
 set( CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules ${CMAKE_MODULE_PATH} )
@@ -32,7 +32,7 @@ add_subdirectory( Gamepad )
 set( HDRS ${PROTO_HDRS} NinjaGUI.h JoystickHandler.h)
 
 if(JOYSTICK_CONTROL)
-    set( SRCS JoystickHandler.cpp control-joystick.cpp ${PROTO_SRCS} )
+    set( SRCS JoystickHandler.cpp commander_node.cpp ${PROTO_SRCS} )
 else()
     set( SRCS main.cpp NinjaGUI.cpp JoystickHandler.cpp control-daemon.cpp ${PROTO_SRCS} )
 endif()
