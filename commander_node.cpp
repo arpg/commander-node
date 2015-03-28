@@ -23,7 +23,7 @@ NinjaCommandMsg BuildJoystickStateMsg( JoystickHandler& Joy)
 
 int main()
 {
-    bool bNodeSubsribed = false;
+    bool bNodeSubscribed = false;
 
     // Initialize Commander Node
     commander_node.init("commander_node");
@@ -43,12 +43,11 @@ int main()
         joystickPhi = (double)joystick.GetAxisValue(2);
 
         // Subscribe to ninja node
-        if( !bNodeSubsribed ){
+        if( !bNodeSubscribed ){
           if( commander_node.subscribe("ninja_node/state") == false ){
-            printf("Couldn't subscribe to nc_nide/state");
-        }else{
-          bNodeSubsribed = true;
+            printf("Couldn't subscribe to nc_node/state \n");
           }
+            bNodeSubscribed = true;
         }
 
         // Send Command to Ninja
@@ -61,8 +60,11 @@ int main()
         NinjaStateMsg Ninjastate;
         if( commander_node.receive("ninja_node/state",Ninjastate) ){
           printf("Ninja's State is: Acc_x:%d    Acc_y:%d \n",Ninjastate.acc_x(),Ninjastate.acc_y());
+        }else
+        {
+          printf("node.receive returned false .......... \n");
+          bNodeSubscribed = false;
         }
-
         // Sleep 10ms
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
