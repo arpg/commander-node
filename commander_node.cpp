@@ -31,7 +31,6 @@
 #define CIRCLEB_ORIGIN_Y     1
 
 
-
 double PID_I_Buff[PID_I_BuffSize];
 bool g_bError =false;
 double joystickAccel,joystickPhi;
@@ -295,11 +294,11 @@ int main()
     while(1)
     {
         // Receive Ninja's State
-        NinjaStateMsg Ninjastate = Read_NinjaState(commander_node);
+//        NinjaStateMsg Ninjastate = Read_NinjaState(commander_node);
 
         // Receive Posys
-        std::vector<double> Pose_quaternion = Read_Pose(commander_node);
-          std::vector<double> pose_6dof = Quaternion2Euler(Pose_quaternion);
+//        std::vector<double> Pose_quaternion = Read_Pose(commander_node);
+//        std::vector<double> pose_6dof = Quaternion2Euler(Pose_quaternion);
 
         //update the joystick and get the accel/phi values
         joystick.UpdateJoystick();
@@ -307,19 +306,27 @@ int main()
         joystickPhi = -(double)joystick.GetAxisValue(2);
 //        printf("Axis_acc: %f   Axis_Phi: %f\n",joystickAccel,joystickPhi);
 
-        NinjaCommandMsg cmd,cmd2;
-        if((joystick.IsButtonPressed(4))||(false)){   // Then go to auto-control
-          cmd = Control_PID(pose_6dof);
+        NinjaCommandMsg cmd;
+        if((joystick.IsButtonPressed(4))&&(false)){   // Then go to auto-control
+//          cmd = Control_PID(pose_6dof);
           //cmd2 = BuildJoystickStateMsg(joystick);
           //cmd.set_speed(cmd2.speed());
-          Publish_NinjaCmd(commander_node,cmd);
+//          Publish_NinjaCmd(commander_node,cmd);
         }else{
-          cmd = BuildJoystickStateMsg(joystick);
+          //cmd = BuildJoystickStateMsg(joystick);
+          int ii=0;
+          if(ii<10)
+            ii++;
+          else
+            ii=0;
+          cmd.set_speed((double)ii/10);
+          cmd.set_turnrate(joystickPhi);
           Publish_NinjaCmd(commander_node,cmd);
+          std::cout << "SENT" << std::endl;
         }
 
         // Sleep
-        //std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        std::this_thread::sleep_for(std::chrono::milliseconds(200));
     }
 
 }
