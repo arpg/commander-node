@@ -1,11 +1,9 @@
-#include "Messages.pb.h"
-#include <HAL/Utils/Node.h>
+#include <HAL/Messages.pb.h>
+//#include <HAL/Utils/Node.h>
 #include "JoystickHandler.h"
 #include <Node/Node.h>
 #include "NinjaMsgs.pb.h"
 //#include <HAL/Posys/PosysDevice.h>
-#include <PbMsgs/Pose.pb.h>
-#include <miniglog/logging.h>
 #include <vector>
 #include <HAL/Utils/TicToc.h>
 
@@ -85,10 +83,10 @@ std::vector<double> Read_Pose( node::node &posys_node){
       bNodeSubscribedPosys = true;
   }
   // Receive Posys State
-  pb::PoseMsg Posys;
+  hal::PoseMsg Posys;
   if( posys_node.receive("posetonode/pose",Posys) ){
 //    printf("*********************************************************\n");
-    if(Posys.type() == pb::PoseMsg::Type::PoseMsg_Type_SE3){
+    if(Posys.type() == hal::PoseMsg::Type::PoseMsg_Type_SE3){
 //        std::cout << "Posys Id: " << Posys.id() << ". Data: ";
         for (int ii = 0; ii < Posys.pose().data_size(); ++ii) {
           Pose_vector.push_back(Posys.pose().data(ii));
@@ -321,5 +319,7 @@ int main()
         // Sleep
         //std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
+
+    joystick.JoinThread();
 
 }

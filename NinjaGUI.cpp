@@ -1,7 +1,7 @@
 #include "NinjaGUI.h"
 
 #include <iostream>
-#include <boost/bind.hpp>
+#include <thread>
 #include <pangolin/pangolin.h>
 #include <thread>
 #include <string>
@@ -62,7 +62,7 @@ void NinjaGUI::GUImain(void)
   pangolin::RegisterKeyPressCallback( PANGO_CTRL + 'b', SetVarFunctor<double>("ui.A Double", 3.5) );
 
   // Demonstration of how we can register a keyboard hook to trigger a method
-  //pangolin::RegisterKeyPressCallback( PANGO_CTRL + 'r', boost::bind(GlobalKeyHook, "You Pushed ctrl-r!" ) );
+  //pangolin::RegisterKeyPressCallback( PANGO_CTRL + 'r', std::bind(GlobalKeyHook, "You Pushed ctrl-r!" ) );
 
   // Default hooks for exiting (Esc) and fullscreen (tab).
   while( !pangolin::ShouldQuit() )

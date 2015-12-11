@@ -3,11 +3,11 @@
 #include <HAL/IMU/IMUDevice.h>
 
 #include <HAL/Utils/Node.h>
+#include <node/Node.h>
 
-#include "Command.pb.h"
 #include "JoystickHandler.h"
+#include <functional>
 #include <iostream>
-#include <boost/bind.hpp>
 
 pangolin::DataLog theLog;  //vector of points
 pangolin::DataLog AccLog;  //vector of points
@@ -41,7 +41,7 @@ JoystickHandler theGamepad;
 using namespace pangolin;
 int KeyCounter = 0;
 
-rpg::Node Node;
+node::Node Node;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void IMU_Handler(pb::ImuMsg& IMUdata)
@@ -159,13 +159,13 @@ int main(int argc, char** argv)
     // Demonstration of how we can register a keyboard hook to alter a Var
 //    pangolin::RegisterKeyPressCallback('w', SetVarFunctor<double>("ui.Throttle", 50) );
 
-    pangolin::RegisterKeyPressCallback( 'w', boost::bind(GlobalKeyHook,PANGO_KEY_UP) );
-    pangolin::RegisterKeyPressCallback( 's', boost::bind(GlobalKeyHook,PANGO_KEY_DOWN) );
-    pangolin::RegisterKeyPressCallback( 'a', boost::bind(GlobalKeyHook,PANGO_KEY_LEFT) );
-    pangolin::RegisterKeyPressCallback( 'd', boost::bind(GlobalKeyHook,PANGO_KEY_RIGHT) );
+    pangolin::RegisterKeyPressCallback( 'w', std::bind(GlobalKeyHook,PANGO_KEY_UP) );
+    pangolin::RegisterKeyPressCallback( 's', std::bind(GlobalKeyHook,PANGO_KEY_DOWN) );
+    pangolin::RegisterKeyPressCallback( 'a', std::bind(GlobalKeyHook,PANGO_KEY_LEFT) );
+    pangolin::RegisterKeyPressCallback( 'd', std::bind(GlobalKeyHook,PANGO_KEY_RIGHT) );
 
     // Demonstration of how we can register a keyboard hook to trigger a method
-//    pangolin::RegisterKeyPressCallback( PANGO_CTRL + 'r', boost::bind(GlobalKeyHook, "You Pushed ctrl-r!" ) );
+//    pangolin::RegisterKeyPressCallback( PANGO_CTRL + 'r', std::bind(GlobalKeyHook, "You Pushed ctrl-r!" ) );
 
     // set up a publisher
     if( Node.Publish("CarControl", 6002) == false ) {
@@ -224,6 +224,9 @@ int main(int argc, char** argv)
         // sleep
         usleep(10000);
     }
+
+    theGamepad.JoinThread();
+
     return 0;
 }
 

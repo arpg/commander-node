@@ -3,7 +3,8 @@
 #include <stdio.h>
 #include <iostream>
 
-#include <boost/thread.hpp>
+#include <thread>
+#include <vector>
 
 #include "Gamepad/Gamepad.h"
 #include "Gamepad/EventDispatcher.h"
@@ -21,6 +22,8 @@ public:
     double GetAxisValue(int id) { return id < (int)m_vAxes.size() ? m_vAxes[id] : 0; }
     bool IsButtonPressed(int id){ return id < (int)m_vButtonStates.size() ? m_vButtonStates[id] == 1 : false; }
 
+    void JoinThread();
+
 
 private:
     void _ThreadFunc();
@@ -32,6 +35,6 @@ private:
 
     std::vector<double> m_vAxes;
     std::vector<int>    m_vButtonStates;
-    boost::thread*      m_pJoystickThread;
+    std::thread*      m_pJoystickThread;
 
 };

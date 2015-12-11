@@ -90,9 +90,13 @@ bool JoystickHandler::_OnDeviceRemoved(void * sender, const char * eventID, void
 
 bool JoystickHandler::InitializeJoystick()
 {
-    m_pJoystickThread = new boost::thread(boost::bind(&JoystickHandler::_ThreadFunc,this));
+    m_pJoystickThread = new std::thread(std::bind(&JoystickHandler::_ThreadFunc,this));
 
     return true;
+}
+
+void JoystickHandler::JoinThread() {
+    m_pJoystickThread->join();
 }
 
 void JoystickHandler::_ThreadFunc()

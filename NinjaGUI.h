@@ -4,7 +4,7 @@
 #endif // NINJAGUI_H
 
 #include <iostream>
-#include <boost/bind.hpp>
+#include <functional>
 #include <pangolin/pangolin.h>
 #include <thread>
 
