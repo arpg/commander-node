@@ -28,6 +28,5 @@ if(UNIX)
     endif()
 endif()
 
-
 add_library(Gamepad ${GAMEPAD_HDRS} ${GAMEPAD_SRC} )
 target_link_libraries(Gamepad ${GAMEPAD_LIBRARIES} ${IOKit_LIBRARIES} )
