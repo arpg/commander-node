@@ -1,7 +1,7 @@
 #include <HAL/Messages.pb.h>
 //#include <HAL/Utils/Node.h>
 #include "JoystickHandler.h"
-#include <Node/Node.h>
+#include <node/Node.h>
 #include "NinjaMsgs.pb.h"
 //#include <HAL/Posys/PosysDevice.h>
 #include <vector>

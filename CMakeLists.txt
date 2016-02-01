@@ -10,13 +10,11 @@ option(JOYSTICK_CONTROL "Enable in order to control ninja with joystick" ON)
 find_package( HAL REQUIRED )
 find_package( Node REQUIRED )
 find_package( Protobuf REQUIRED )
-#find_package( SceneGraph REQUIRED)
 include_directories( ${CMAKE_BINARY_DIR} )
 PROTOBUF_GENERATE_CPP( PROTO_SRCS PROTO_HDRS NinjaMsgs.proto )
 
 include_directories( ${HAL_INCLUDE_DIRS} )
 include_directories( ${Node_INCLUDE_DIRS} )
-#include_directories( ${SceneGraph_INCLUDE_DIRS} )
 
 add_subdirectory( Gamepad )
 set( HDRS ${PROTO_HDRS} JoystickHandler.h)
@@ -33,7 +31,6 @@ target_link_libraries( ${PROJECT_NAME}
 		${HAL_LIBRARIES}
     ${PROTOBUF_LIBRARY}
 		${Node_LIBRARIES}
-#		${SceneGraph_LIBRARIES}
 		${PROTOBUF_LIBRARIES}
 		Gamepad
 		)
