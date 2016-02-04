@@ -103,8 +103,8 @@ static char ** findGamepadPaths(unsigned int * outNumGamepads) {
 				close(fd);
 				
 				numGamepads++;
-				gamepadDevs = realloc(gamepadDevs, sizeof(char *) * numGamepads);
-				gamepadDevs[numGamepads - 1] = malloc(strlen(fileName) + 1);
+                gamepadDevs = (char**)realloc(gamepadDevs, sizeof(char *) * numGamepads);
+                gamepadDevs[numGamepads - 1] = (char*)malloc(strlen(fileName) + 1);
 				strcpy(gamepadDevs[numGamepads - 1], fileName);
 			}
 		}
@@ -170,7 +170,7 @@ void Gamepad_shutdown() {
 		
 		for (eventIndex = 0; eventIndex < eventCount; eventIndex++) {
 			if (!strcmp(eventQueue[eventIndex].eventType, GAMEPAD_EVENT_DEVICE_REMOVED)) {
-				disposeDevice(eventQueue[eventIndex].eventData);
+                disposeDevice((Gamepad_device*)eventQueue[eventIndex].eventData);
 			}
 		}
 		
@@ -229,7 +229,7 @@ static void queueEvent(EventDispatcher * dispatcher, const char * eventType, voi
 	pthread_mutex_lock(&eventQueueMutex);
 	if (eventCount >= eventQueueSize) {
 		eventQueueSize = eventQueueSize == 0 ? 1 : eventQueueSize * 2;
-		eventQueue = realloc(eventQueue, sizeof(struct Gamepad_queuedEvent) * eventQueueSize);
+        eventQueue = (Gamepad_queuedEvent*)realloc(eventQueue, sizeof(struct Gamepad_queuedEvent) * eventQueueSize);
 	}
 	eventQueue[eventCount++] = queuedEvent;
 	pthread_mutex_unlock(&eventQueueMutex);
@@ -238,7 +238,7 @@ static void queueEvent(EventDispatcher * dispatcher, const char * eventType, voi
 static void queueAxisEvent(struct Gamepad_device * device, double timestamp, unsigned int axisID, float value) {
 	struct Gamepad_axisEvent * axisEvent;
 	
-	axisEvent = malloc(sizeof(struct Gamepad_axisEvent));
+    axisEvent = (Gamepad_axisEvent*)malloc(sizeof(struct Gamepad_axisEvent));
 	axisEvent->device = device;
 	axisEvent->timestamp = timestamp;
 	axisEvent->axisID = axisID;
@@ -250,7 +250,7 @@ static void queueAxisEvent(struct Gamepad_device * device, double timestamp, uns
 static void queueButtonEvent(struct Gamepad_device * device, double timestamp, unsigned int buttonID, bool down) {
 	struct Gamepad_buttonEvent * buttonEvent;
 	
-	buttonEvent = malloc(sizeof(struct Gamepad_buttonEvent));
+    buttonEvent = (Gamepad_buttonEvent*)malloc(sizeof(struct Gamepad_buttonEvent));
 	buttonEvent->device = device;
 	buttonEvent->timestamp = timestamp;
 	buttonEvent->buttonID = buttonID;
@@ -265,8 +265,8 @@ static void * deviceThread(void * context) {
 	struct Gamepad_devicePrivate * devicePrivate;
 	struct input_event event;
 	
-	device = context;
-	devicePrivate = device->privateData;
+    device = (Gamepad_device*)context;
+    devicePrivate = (Gamepad_devicePrivate*)device->privateData;
 	
 	while (read(devicePrivate->fd, &event, sizeof(struct input_event)) > 0) {
 		if (event.type == EV_ABS) {
@@ -354,15 +354,15 @@ void Gamepad_detectDevices() {
 		}
 		
 		if (!stat(gamepadPaths[pathIndex], &statBuf)) {
-			deviceRecord = malloc(sizeof(struct Gamepad_device));
+            deviceRecord = (Gamepad_device*)malloc(sizeof(struct Gamepad_device));
 			deviceRecord->deviceID = nextDeviceID++;
 			deviceRecord->eventDispatcher = EventDispatcher_create(deviceRecord);
-			devices = realloc(devices, sizeof(struct Gamepad_device *) * (numDevices + 1));
+            devices = (Gamepad_device**)realloc(devices, sizeof(struct Gamepad_device *) * (numDevices + 1));
 			devices[numDevices++] = deviceRecord;
 			
 			fd = open(gamepadPaths[pathIndex], O_RDONLY, 0);
 			
-			deviceRecordPrivate = malloc(sizeof(struct Gamepad_devicePrivate));
+            deviceRecordPrivate = (Gamepad_devicePrivate*)malloc(sizeof(struct Gamepad_devicePrivate));
 			deviceRecordPrivate->fd = fd;
 			deviceRecordPrivate->path = gamepadPaths[pathIndex];
 			memset(deviceRecordPrivate->buttonMap, 0xFF, sizeof(deviceRecordPrivate->buttonMap));
@@ -370,10 +370,10 @@ void Gamepad_detectDevices() {
 			deviceRecord->privateData = deviceRecordPrivate;
 			
 			if (ioctl(fd, EVIOCGNAME(sizeof(name)), name) > 0) {
-				description = malloc(strlen(name + 1));
+                description = (char*)malloc(strlen(name + 1));
 				strcpy(description, name);
 			} else {
-				description = malloc(strlen(gamepadPaths[pathIndex] + 1));
+                description = (char*)malloc(strlen(gamepadPaths[pathIndex] + 1));
 				strcpy(description, gamepadPaths[pathIndex]);
 			}
 			deviceRecord->description = description;
@@ -409,8 +409,8 @@ void Gamepad_detectDevices() {
 				}
 			}
 			
-			deviceRecord->axisStates = calloc(sizeof(float), deviceRecord->numAxes);
-			deviceRecord->buttonStates = calloc(sizeof(bool), deviceRecord->numButtons);
+            deviceRecord->axisStates = (float*)calloc(sizeof(float), deviceRecord->numAxes);
+            deviceRecord->buttonStates = (bool*)calloc(sizeof(bool), deviceRecord->numButtons);
 			
 			Gamepad_eventDispatcher()->dispatchEvent(Gamepad_eventDispatcher(), GAMEPAD_EVENT_DEVICE_ATTACHED, deviceRecord);
 			
@@ -431,7 +431,7 @@ void Gamepad_processEvents() {
 	for (eventIndex = 0; eventIndex < eventCount; eventIndex++) {
 		eventQueue[eventIndex].dispatcher->dispatchEvent(eventQueue[eventIndex].dispatcher, eventQueue[eventIndex].eventType, eventQueue[eventIndex].eventData);
 		if (!strcmp(eventQueue[eventIndex].eventType, GAMEPAD_EVENT_DEVICE_REMOVED)) {
-			disposeDevice(eventQueue[eventIndex].eventData);
+            disposeDevice((Gamepad_device*)eventQueue[eventIndex].eventData);
 		}
 	}
 	eventCount = 0;

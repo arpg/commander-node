@@ -105,6 +105,6 @@ void JoystickHandler::_ThreadFunc()
     Gamepad_eventDispatcher()->registerForEvent(Gamepad_eventDispatcher(), GAMEPAD_EVENT_DEVICE_REMOVED, _OnDeviceRemoved, this);
     Gamepad_init();
 
-    Gamepad_RunLoop();
+    //Gamepad_RunLoop();
 }
 
