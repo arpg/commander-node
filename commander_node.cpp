@@ -277,14 +277,14 @@ int main()
 {
 
     CIRCLE_RADIOUS = 0.5 * std::sqrt(std::pow(CIRCLEB_ORIGIN_X-CIRCLEA_ORIGIN_X,2)-std::pow(CIRCLEB_ORIGIN_Y-CIRCLEA_ORIGIN_Y,2));
-    node::node  commander_node;
+//    node::node  commander_node;
 
     // Initialize Commander Node
-    commander_node.init("commander_node");
+//    commander_node.init("commander_node");
 
-    if( commander_node.advertise("command") == false ){
-      printf("Error setting up publisher!\n");
-    }
+//    if( commander_node.advertise("command") == false ){
+//      printf("Error setting up publisher!\n");
+//    }
 
     JoystickHandler joystick;
     joystick.InitializeJoystick();
@@ -319,8 +319,8 @@ int main()
             ii=0;
           cmd.set_speed((double)ii/10);
           cmd.set_turnrate(joystickPhi);
-          Publish_NinjaCmd(commander_node,cmd);
-          std::cout << "SENT" << std::endl;
+//          Publish_NinjaCmd(commander_node,cmd);
+//          std::cout << "SENT" << std::endl;
         }
 
         // Sleep
